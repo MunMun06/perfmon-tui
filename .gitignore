@@ -1,0 +1,15 @@
+# Compiled object files
+*.o
+
+# Executables
+perfmon-tui
+*.out
+*.exe
+
+# Build directories
+build/
+
+# Backup/temporary files
+*~
+*.swp
+
