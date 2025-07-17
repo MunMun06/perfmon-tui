@@ -4,6 +4,10 @@
 class SystemMonitor {
 public:
   void printStats();
+
+private:
+  float getCPUUsage();
+  float getMemoryUsage();
 };
 
 #endif // SYSTEM_MONITOR_HPP
