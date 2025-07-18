@@ -1,2 +1,2 @@
 # perfmon-tui
-TUI for system performance
+TUI for linux system performance
