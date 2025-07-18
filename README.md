@@ -1,6 +1,6 @@
 # perfmon-tui
 
-> A lightweight tui system performance monitor built in C++ for Linux.
+A lightweight tui system performance monitor built in C++ for Linux.
 
 ## Features
 
