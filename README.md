@@ -24,7 +24,13 @@ A lightweight tui system performance monitor built in C++ for Linux.
 
 ```bash
 make
+```
+
+### Run 
+
+```bash
 ./perfmon-tui
 ```
+
 ## License
   This project is licensed under the GNU GPLv3
