@@ -37,7 +37,7 @@ float SystemMonitor::getCPUUsage() {
          (1.0f - (idleTime2 - idleTime1) / float(totalTime2 - totalTime1));
 }
 
-float SystemMonitor::getMemoryUsage() {
+float SystemMonitor::getMemoryUsage(float &totalMB, float &usedMB) {
   std::ifstream file("/proc/meminfo");
   std::string line;
   long total = 0, available = 0;
@@ -53,14 +53,17 @@ float SystemMonitor::getMemoryUsage() {
       total = value;
     if (key == "MemAvailable:")
       available = value;
+
     if (total && available)
       break;
   }
 
-  return 100.0f * (1.0f - (float)available / total);
+  usedMB = (total - available) / 1024.0f;
+  totalMB = total / 1024.0f;
+  return 100.0f * usedMB / totalMB;
 }
 
-void drawBar(float percent) {
+void drawBar(float percent, const std::string &label = "") {
   int width = 30;
   int filled = percent / 100.0f * width;
 
@@ -73,19 +76,37 @@ void drawBar(float percent) {
   }
   std::cout << "] ";
   std::cout << std::fixed << std::setprecision(1) << percent << " %";
+
+  if (!label.empty()) {
+    std::cout << "  " << label;
+  }
+
   std::cout << std::endl;
 }
 
 void SystemMonitor::printStats() {
   float cpu = getCPUUsage();
-  float mem = getMemoryUsage();
+  float totalMB, usedMB;
+  float mem = getMemoryUsage(totalMB, usedMB);
 
+  // Header
   std::cout << "\033[1;34m==============================\033[0m\n";
   std::cout << "         perfmon-tui\n";
   std::cout << "\033[1;34m==============================\033[0m\n\n";
 
+  // Draw CPU and Memory bars with stats
+  std::ostringstream cpuLabel;
+  cpuLabel << std::fixed << std::setprecision(1)
+           << (cpu / 100.0f * std::thread::hardware_concurrency()) << " / "
+           << std::thread::hardware_concurrency() << " Threads";
+
   std::cout << "CPU Usage   ";
-  drawBar(cpu);
+  drawBar(cpu, cpuLabel.str());
+
+  std::ostringstream memLabel;
+  memLabel << std::fixed << std::setprecision(1) << usedMB << " / " << totalMB
+           << " MB";
+
   std::cout << "Memory Usage";
-  drawBar(mem);
+  drawBar(mem, memLabel.str());
 }

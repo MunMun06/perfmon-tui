@@ -7,7 +7,7 @@ public:
 
 private:
   float getCPUUsage();
-  float getMemoryUsage();
+  float getMemoryUsage(float &totalMB, float &usedMB);
 };
 
 #endif // SYSTEM_MONITOR_HPP
